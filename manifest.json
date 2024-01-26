@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "single-line-paste",
+	"name": "Single Line Paste",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Paste content from the clipboard in a single line.",
+	"author": "Philipp B.",
+	"authorUrl": "https://philipp-bonin.com",
+	"fundingUrl": "https://philipp-bonin.com",
 	"isDesktopOnly": false
 }
