@@ -237,122 +237,122 @@ export class GreekLetterModal extends Modal {
 
 		const letters = [
 			{
-				name: "alpha",
+				name: "Alpha",
 				symbolUpper: "Α",
 				symbolLower: "α",
 			},
 			{
-				name: "beta",
+				name: "Beta",
 				symbolUpper: "Β",
 				symbolLower: "β",
 			},
 			{
-				name: "gamma",
+				name: "Gamma",
 				symbolUpper: "Γ",
 				symbolLower: "γ",
 			},
 			{
-				name: "delta",
+				name: "Delta",
 				symbolUpper: "Δ",
 				symbolLower: "δ",
 			},
 			{
-				name: "epsilon",
+				name: "Epsilon",
 				symbolUpper: "Ε",
 				symbolLower: "ε",
 			},
 			{
-				name: "zeta",
+				name: "Zeta",
 				symbolUpper: "Ζ",
 				symbolLower: "ζ",
 			},
 			{
-				name: "eta",
+				name: "Eta",
 				symbolUpper: "Η",
 				symbolLower: "η",
 			},
 			{
-				name: "theta",
+				name: "Theta",
 				symbolUpper: "Θ",
 				symbolLower: "θ",
 			},
 			{
-				name: "iota",
+				name: "Iota",
 				symbolUpper: "Ι",
 				symbolLower: "ι",
 			},
 			{
-				name: "kappa",
+				name: "Kappa",
 				symbolUpper: "Κ",
 				symbolLower: "κ",
 			},
 			{
-				name: "lambda",
+				name: "Lambda",
 				symbolUpper: "Λ",
 				symbolLower: "λ",
 			},
 			{
-				name: "mu",
+				name: "Mu",
 				symbolUpper: "Μ",
 				symbolLower: "μ",
 			},
 			{
-				name: "nu",
+				name: "Nu",
 				symbolUpper: "Ν",
 				symbolLower: "ν",
 			},
 			{
-				name: "xi",
+				name: "Xi",
 				symbolUpper: "Ξ",
 				symbolLower: "ξ",
 			},
 			{
-				name: "omicron",
+				name: "Omicron",
 				symbolUpper: "Ο",
 				symbolLower: "ο",
 			},
 			{
-				name: "pi",
+				name: "Pi",
 				symbolUpper: "Π",
 				symbolLower: "π",
 			},
 			{
-				name: "rho",
+				name: "Rho",
 				symbolUpper: "Ρ",
 				symbolLower: "ρ",
 			},
 			{
-				name: "sigma",
+				name: "Sigma",
 				symbolUpper: "Σ",
 				symbolLower: "σ",
 			},
 			{
-				name: "tau",
+				name: "Tau",
 				symbolUpper: "Τ",
 				symbolLower: "τ",
 			},
 			{
-				name: "upsilon",
+				name: "Upsilon",
 				symbolUpper: "Υ",
 				symbolLower: "υ",
 			},
 			{
-				name: "phi",
+				name: "Phi",
 				symbolUpper: "Φ",
 				symbolLower: "φ",
 			},
 			{
-				name: "chi",
+				name: "Chi",
 				symbolUpper: "Χ",
 				symbolLower: "χ",
 			},
 			{
-				name: "psi",
+				name: "Psi",
 				symbolUpper: "Ψ",
 				symbolLower: "ψ",
 			},
 			{
-				name: "omega",
+				name: "Omega",
 				symbolUpper: "Ω",
 				symbolLower: "ω",
 			},
@@ -369,8 +369,21 @@ export class GreekLetterModal extends Modal {
 				})
 		);
 
+		// display the buttons as a grid
+		contentEl.createEl("div", {
+			cls: "greek-letter-grid",
+		});
+
+		const gridEl = contentEl.lastChild;
+		if (!gridEl) {
+			console.error("gridEl is null");
+			return;
+		}
+
+		// add a button for each letter
+
 		letters.forEach((letter) => {
-			new Setting(contentEl).addButton((btn) =>
+			new Setting(gridEl as HTMLElement).addButton((btn) =>
 				btn
 					.setButtonText(
 						letter.name +
@@ -387,6 +400,7 @@ export class GreekLetterModal extends Modal {
 								: letter.symbolLower
 						);
 					})
+					.setClass("greek-letter-btn")
 			);
 		});
 	}
