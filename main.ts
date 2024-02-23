@@ -71,6 +71,57 @@ export default class MyPlugin extends Plugin {
 					});
 			},
 		});
+
+		this.addCommand({
+			id: "make-subscript",
+			name: "Make Subscript",
+			editorCallback: (editor, view) => {
+				let selectedText = editor.getSelection();
+				// select char before selection when there is no selection
+				if (selectedText.length === 0) {
+					editor.setSelection(
+						{
+							line: editor.getCursor().line,
+							ch: editor.getCursor().ch - 1,
+						},
+						editor.getCursor()
+					);
+					selectedText = editor.getSelection();
+				}
+				editor.replaceSelection(`<sub>${selectedText}</sub>`);
+			},
+		});
+		this.addCommand({
+			id: "make-superscript",
+			name: "Make Superscript",
+			editorCallback: (editor, view) => {
+				let selectedText = editor.getSelection();
+				// select char before selection when there is no selection
+				if (selectedText.length === 0) {
+					editor.setSelection(
+						{
+							line: editor.getCursor().line,
+							ch: editor.getCursor().ch - 1,
+						},
+						editor.getCursor()
+					);
+					selectedText = editor.getSelection();
+				}
+				editor.replaceSelection(`<sup>${selectedText}</sup>`);
+			},
+		});
+
+		this.addCommand({
+			id: "get-greek-letter",
+			name: "Get Greek Letter",
+			editorCallback: (editor, view) => {
+				new GreekLetterModal(this.app, (result) => {
+					// add the result to the editor at the cursor position
+					editor.replaceRange(result, editor.getCursor());
+				}).open();
+			},
+		});
+
 		// This adds a complex command that can check whether the current state of the app allows execution of the command
 		/* this.addCommand({
 			id: 'open-sample-modal-complex',
@@ -162,5 +213,186 @@ class SampleSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 			);
+	}
+}
+
+export class GreekLetterModal extends Modal {
+	result: string;
+	uppercase: boolean;
+	onSubmit: (result: string) => void;
+
+	constructor(app: App, onSubmit: (result: string) => void) {
+		super(app);
+		this.onSubmit = onSubmit;
+		this.uppercase = false;
+	}
+
+	onOpen() {
+		const { contentEl } = this;
+		// remove all content
+		contentEl.empty();
+		// add new content
+
+		contentEl.createEl("h1", { text: "Select a letter" });
+
+		const letters = [
+			{
+				name: "alpha",
+				symbolUpper: "Α",
+				symbolLower: "α",
+			},
+			{
+				name: "beta",
+				symbolUpper: "Β",
+				symbolLower: "β",
+			},
+			{
+				name: "gamma",
+				symbolUpper: "Γ",
+				symbolLower: "γ",
+			},
+			{
+				name: "delta",
+				symbolUpper: "Δ",
+				symbolLower: "δ",
+			},
+			{
+				name: "epsilon",
+				symbolUpper: "Ε",
+				symbolLower: "ε",
+			},
+			{
+				name: "zeta",
+				symbolUpper: "Ζ",
+				symbolLower: "ζ",
+			},
+			{
+				name: "eta",
+				symbolUpper: "Η",
+				symbolLower: "η",
+			},
+			{
+				name: "theta",
+				symbolUpper: "Θ",
+				symbolLower: "θ",
+			},
+			{
+				name: "iota",
+				symbolUpper: "Ι",
+				symbolLower: "ι",
+			},
+			{
+				name: "kappa",
+				symbolUpper: "Κ",
+				symbolLower: "κ",
+			},
+			{
+				name: "lambda",
+				symbolUpper: "Λ",
+				symbolLower: "λ",
+			},
+			{
+				name: "mu",
+				symbolUpper: "Μ",
+				symbolLower: "μ",
+			},
+			{
+				name: "nu",
+				symbolUpper: "Ν",
+				symbolLower: "ν",
+			},
+			{
+				name: "xi",
+				symbolUpper: "Ξ",
+				symbolLower: "ξ",
+			},
+			{
+				name: "omicron",
+				symbolUpper: "Ο",
+				symbolLower: "ο",
+			},
+			{
+				name: "pi",
+				symbolUpper: "Π",
+				symbolLower: "π",
+			},
+			{
+				name: "rho",
+				symbolUpper: "Ρ",
+				symbolLower: "ρ",
+			},
+			{
+				name: "sigma",
+				symbolUpper: "Σ",
+				symbolLower: "σ",
+			},
+			{
+				name: "tau",
+				symbolUpper: "Τ",
+				symbolLower: "τ",
+			},
+			{
+				name: "upsilon",
+				symbolUpper: "Υ",
+				symbolLower: "υ",
+			},
+			{
+				name: "phi",
+				symbolUpper: "Φ",
+				symbolLower: "φ",
+			},
+			{
+				name: "chi",
+				symbolUpper: "Χ",
+				symbolLower: "χ",
+			},
+			{
+				name: "psi",
+				symbolUpper: "Ψ",
+				symbolLower: "ψ",
+			},
+			{
+				name: "omega",
+				symbolUpper: "Ω",
+				symbolLower: "ω",
+			},
+		];
+
+		new Setting(contentEl).addButton((btn) =>
+			btn
+				.setButtonText(this.uppercase ? "Lowercase" : "Uppercase")
+				.setCta()
+				.onClick(() => {
+					this.uppercase = !this.uppercase;
+					// rerender the modal
+					this.onOpen();
+				})
+		);
+
+		letters.forEach((letter) => {
+			new Setting(contentEl).addButton((btn) =>
+				btn
+					.setButtonText(
+						letter.name +
+							" " +
+							(this.uppercase
+								? letter.symbolUpper
+								: letter.symbolLower)
+					)
+					.onClick(() => {
+						this.close();
+						this.onSubmit(
+							this.uppercase
+								? letter.symbolUpper
+								: letter.symbolLower
+						);
+					})
+			);
+		});
+	}
+
+	onClose() {
+		let { contentEl } = this;
+		contentEl.empty();
 	}
 }
